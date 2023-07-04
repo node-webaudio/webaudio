@@ -1,12 +1,41 @@
 {
   "name": "@webaudio/react",
+  "private": false,
   "version": "0.0.0",
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [
+    "dist/"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
   "module": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ayan4m1/decibel-meter-ts"
+  },
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c --configPlugin typescript",
     "lint:staged": "lint-staged --relative"
   },
   "devDependencies": {
-    "lint-staged": "^13.2.3"
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "lint-staged": "^13.2.3",
+    "prettier": "^2.8.8",
+    "rollup": "^3.26.0",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "react": "18.x"
   }
 }
