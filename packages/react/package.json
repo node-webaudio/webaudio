@@ -1,0 +1,12 @@
+{
+  "name": "@webaudio/react",
+  "version": "0.0.0",
+  "module": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "lint:staged": "lint-staged --relative"
+  },
+  "devDependencies": {
+    "lint-staged": "^13.2.3"
+  }
+}
