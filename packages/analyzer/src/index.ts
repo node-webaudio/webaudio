@@ -13,16 +13,16 @@ export type AnalyzerOptions = {
   smoothingTimeConstant: number;
 };
 
-export class WebAudioCore {
+export class AudioAnalyzer extends EventEmitter {
   context: IAudioContext;
   analyzer: IAnalyserNode<AudioContext>;
   source: IMediaStreamAudioSourceNode<AudioContext>;
-  events = new EventEmitter();
   private updateHandle: number = null;
   connected = false;
   listening = false;
 
   constructor(context: IAudioContext = new AudioContext()) {
+    super();
     this.context = context;
     this.update = this.update.bind(this);
   }
@@ -68,7 +68,7 @@ export class WebAudioCore {
     this.connected = false;
   }
 
-  listen(analyzerOptions?: AnalyzerOptions) {
+  startListening(analyzerOptions?: AnalyzerOptions) {
     if (this.listening) {
       return;
     }
@@ -102,7 +102,7 @@ export class WebAudioCore {
       return;
     }
 
-    if (this.events.eventNames().includes('volume')) {
+    if (this.eventNames().includes('volume')) {
       const sample = new Uint8Array(1);
       this.analyzer.getByteFrequencyData(sample);
 
@@ -112,17 +112,17 @@ export class WebAudioCore {
         this.analyzer.minDecibels +
         (this.analyzer.maxDecibels - this.analyzer.minDecibels) * percent;
 
-      this.events.emit('volume', {
+      this.emit('volume', {
         decibels: decibels + -this.analyzer.minDecibels,
         raw: value
       });
     }
 
-    if (this.events.eventNames().includes('spectrum')) {
+    if (this.eventNames().includes('spectrum')) {
       const timeSeries = new Uint8Array(this.analyzer.fftSize / 2);
 
       this.analyzer.getByteTimeDomainData(timeSeries);
-      this.events.emit('spectrum', {
+      this.emit('spectrum', {
         data: timeSeries
       });
     }
