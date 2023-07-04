@@ -1,21 +1,21 @@
-import { WebAudioCore } from '@webaudio/analyzer';
+import { AudioAnalyzer } from '@webaudio/analyzer';
 import { useEffect, useRef } from 'react';
 
-export function useWebAudio() {
-  const coreRef = useRef<WebAudioCore>(null);
+export function useAudioAnalyzer() {
+  const coreRef = useRef<AudioAnalyzer>(null);
 
   useEffect(() => {
     if (coreRef.current) {
       return;
     }
 
-    coreRef.current = new WebAudioCore();
+    coreRef.current = new AudioAnalyzer();
 
     return () => coreRef.current.disconnect();
   }, []);
 
   return {
-    getSources: WebAudioCore.getSources,
-    ref: coreRef.current
+    getSources: AudioAnalyzer.getSources,
+    analyzer: coreRef.current
   };
 }
