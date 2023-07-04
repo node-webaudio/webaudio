@@ -1,4 +1,14 @@
 {
   "name": "@webaudio/react",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json"
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "baseBranch": "main",
+        "preset": "conventional",
+        "tagPrefix": "${projectName}@"
+      }
+    }
+  }
 }
