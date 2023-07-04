@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "lint:staged": "npx nx run-many -t lint:staged --projects=@webaudio/*",
+    "test": "npx nx run-many -t test --projects=@webaudio/*",
     "prepare": "husky install"
   },
   "private": true,
