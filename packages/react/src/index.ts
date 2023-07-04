@@ -1,21 +1,22 @@
 import { AudioAnalyzer } from '@webaudio/analyzer';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useAudioAnalyzer() {
-  const coreRef = useRef<AudioAnalyzer>(null);
+  const [analyzer, setAnalyzer] = useState<AudioAnalyzer>(null);
+  const [sources, setSources] = useState<MediaDeviceInfo[]>([]);
+
+  async function updateSources() {
+    setSources(await AudioAnalyzer.getSources());
+  }
 
   useEffect(() => {
-    if (coreRef.current) {
-      return;
-    }
-
-    coreRef.current = new AudioAnalyzer();
-
-    return () => coreRef.current.disconnect();
+    setAnalyzer(new AudioAnalyzer());
+    updateSources();
   }, []);
 
   return {
-    getSources: AudioAnalyzer.getSources,
-    analyzer: coreRef.current
+    analyzer,
+    sources,
+    updateSources
   };
 }
