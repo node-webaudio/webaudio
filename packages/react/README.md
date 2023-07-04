@@ -11,6 +11,7 @@
 ## requirements
 
 - Node 16+
+- React 18.x
 
 ## usage
 
