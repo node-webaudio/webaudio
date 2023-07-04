@@ -6,7 +6,7 @@ import {
 } from 'standardized-audio-context';
 import EventEmitter from 'events';
 
-export type AudioKind = 'audiooutput' | 'audioinput';
+export type AudioKind = 'videoinput' | 'audioinput';
 
 export type SpectrumInfo = {
   data: Uint8Array;
@@ -17,7 +17,7 @@ export type DecibelInfo = {
   decibels: number;
 };
 
-export class DecibelMeter {
+export class WebAudioCore {
   context: IAudioContext;
   analyzer: IAnalyserNode<AudioContext>;
   source: IMediaStreamAudioSourceNode<AudioContext>;
@@ -104,24 +104,30 @@ export class DecibelMeter {
       return;
     }
 
-    const sample = new Uint8Array(1);
-    const timeSeries = new Uint8Array(2048);
-    this.analyzer.getByteFrequencyData(sample);
-    this.analyzer.getByteTimeDomainData(timeSeries);
+    if (this.events.eventNames().includes('volume')) {
+      const sample = new Uint8Array(1);
+      this.analyzer.getByteFrequencyData(sample);
 
-    const value = sample[0];
-    const percent = value / 255;
-    const decibels =
-      this.analyzer.minDecibels +
-      (this.analyzer.maxDecibels - this.analyzer.minDecibels) * percent;
+      const value = sample[0];
+      const percent = value / 255;
+      const decibels =
+        this.analyzer.minDecibels +
+        (this.analyzer.maxDecibels - this.analyzer.minDecibels) * percent;
 
-    this.events.emit('volume', {
-      decibels: decibels + -this.analyzer.minDecibels,
-      raw: value
-    });
-    this.events.emit('spectrum', {
-      data: timeSeries
-    });
+      this.events.emit('volume', {
+        decibels: decibels + -this.analyzer.minDecibels,
+        raw: value
+      });
+    }
+
+    if (this.events.eventNames().includes('spectrum')) {
+      const timeSeries = new Uint8Array(2048);
+
+      this.analyzer.getByteTimeDomainData(timeSeries);
+      this.events.emit('spectrum', {
+        data: timeSeries
+      });
+    }
     this.updateHandle = requestAnimationFrame(this.update);
   }
 }
