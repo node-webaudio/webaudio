@@ -1,5 +1,5 @@
 import { AudioContext } from 'standardized-audio-context-mock';
-import { DecibelMeter, createEvent } from './index';
+import { WebAudioCore } from './index';
 
 const audioContext = new AudioContext();
 const enumerateDevices = jest.fn();
@@ -38,29 +38,15 @@ describe('decibel-meter-ts', () => {
     jest.resetAllMocks();
   });
 
-  describe('createEvent', () => {
-    it('can create a custom event', () => {
-      type Test = {
-        correct: boolean;
-      };
-      const correct = true;
-
-      const result = createEvent<Test>('event', { correct });
-
-      expect(result).not.toBeNull();
-      expect(result.detail.correct).toBe(correct);
-    });
-  });
-
-  describe('DecibelMeter', () => {
+  describe('WebAudioCore', () => {
     it('can be instantiated', () => {
-      expect(new DecibelMeter(audioContext)).not.toBeNull();
+      expect(new WebAudioCore(audioContext)).not.toBeNull();
     });
 
     describe('getSources', () => {
       it('works', async () => {
         enumerateDevices.mockResolvedValueOnce([{ kind: 'audioinput' }]);
-        const result = await DecibelMeter.getSources();
+        const result = await WebAudioCore.getSources();
 
         expect(Array.isArray(result)).toBeTruthy();
         expect(result).toHaveLength(1);
@@ -70,7 +56,7 @@ describe('decibel-meter-ts', () => {
         getUserMedia.mockImplementationOnce(() => {
           throw new Error('Failed');
         });
-        const sources = await DecibelMeter.getSources();
+        const sources = await WebAudioCore.getSources();
 
         expect(sources).toHaveLength(0);
       });
@@ -80,7 +66,7 @@ describe('decibel-meter-ts', () => {
         enumerateDevices.mockImplementationOnce(() => {
           throw new Error('Failed');
         });
-        const sources = await DecibelMeter.getSources();
+        const sources = await WebAudioCore.getSources();
 
         expect(sources).toHaveLength(0);
       });
@@ -89,7 +75,7 @@ describe('decibel-meter-ts', () => {
     describe('connect', () => {
       it('works', async () => {
         getUserMedia.mockResolvedValueOnce(null);
-        const meter = new DecibelMeter(audioContext);
+        const meter = new WebAudioCore(audioContext);
 
         await meter.connect(deviceInfo);
         expect(meter.connected).toBeTruthy();
@@ -98,7 +84,7 @@ describe('decibel-meter-ts', () => {
       });
 
       it('handles already connected case', async () => {
-        const meter = new DecibelMeter(audioContext);
+        const meter = new WebAudioCore(audioContext);
 
         meter.connected = true;
         await meter.connect(deviceInfo);
@@ -109,7 +95,7 @@ describe('decibel-meter-ts', () => {
         getUserMedia.mockImplementationOnce(() => {
           throw new Error('Failed');
         });
-        const meter = new DecibelMeter(audioContext);
+        const meter = new WebAudioCore(audioContext);
 
         expect(async () => {
           await meter.connect(deviceInfo);
@@ -119,7 +105,7 @@ describe('decibel-meter-ts', () => {
 
     describe('disconnect', () => {
       it('works', async () => {
-        const meter = new DecibelMeter(audioContext);
+        const meter = new WebAudioCore(audioContext);
 
         meter.connected = true;
         meter.analyzer = audioContext.createAnalyser();
@@ -130,7 +116,7 @@ describe('decibel-meter-ts', () => {
       });
 
       it('handles disconnected case', () => {
-        const meter = new DecibelMeter(audioContext);
+        const meter = new WebAudioCore(audioContext);
 
         meter.disconnect();
         expect(cancelAnimationFrame).not.toHaveBeenCalled();
