@@ -1,6 +1,6 @@
 import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
-import autoExternal from 'rollup-plugin-auto-external';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 export default {
   input: './src/index.ts',
@@ -12,13 +12,13 @@ export default {
     {
       file: './dist/index.cjs',
       format: 'cjs'
+    },
+    {
+      file: './dist/index.umd.js',
+      name: '@webaudio/core',
+      format: 'umd'
     }
   ],
-  plugins: [
-    autoExternal({
-      builtins: true
-    }),
-    typescript(),
-    terser()
-  ]
+  external: ['standardized-audio-context'],
+  plugins: [nodePolyfills(), typescript(), terser()]
 };
