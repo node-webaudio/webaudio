@@ -1,4 +1,4 @@
-import { WebAudioCore } from '@webaudio/core';
+import { WebAudioCore } from '@webaudio/analyzer';
 import { useEffect, useRef } from 'react';
 
 export function useWebAudio() {
