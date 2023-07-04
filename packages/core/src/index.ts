@@ -8,13 +8,9 @@ import EventEmitter from 'events';
 
 export type AudioKind = 'videoinput' | 'audioinput';
 
-export type SpectrumInfo = {
-  data: Uint8Array;
-};
-
-export type DecibelInfo = {
-  raw: number;
-  decibels: number;
+export type AnalyzerOptions = {
+  fftSize: number;
+  smoothingTimeConstant: number;
 };
 
 export class WebAudioCore {
@@ -58,8 +54,6 @@ export class WebAudioCore {
 
     this.source = this.context.createMediaStreamSource(stream);
     this.analyzer = this.context.createAnalyser();
-    this.analyzer.smoothingTimeConstant = 0.8;
-    this.analyzer.fftSize = 4096;
     this.connected = true;
   }
 
@@ -74,10 +68,14 @@ export class WebAudioCore {
     this.connected = false;
   }
 
-  listen() {
+  listen(analyzerOptions?: AnalyzerOptions) {
     if (this.listening) {
       return;
     }
+
+    this.analyzer.smoothingTimeConstant =
+      analyzerOptions?.smoothingTimeConstant ?? 0.8;
+    this.analyzer.fftSize = analyzerOptions?.fftSize ?? 4096;
 
     this.source.connect(this.analyzer);
     this.updateHandle = requestAnimationFrame(this.update);
@@ -121,13 +119,14 @@ export class WebAudioCore {
     }
 
     if (this.events.eventNames().includes('spectrum')) {
-      const timeSeries = new Uint8Array(2048);
+      const timeSeries = new Uint8Array(this.analyzer.fftSize / 2);
 
       this.analyzer.getByteTimeDomainData(timeSeries);
       this.events.emit('spectrum', {
         data: timeSeries
       });
     }
+
     this.updateHandle = requestAnimationFrame(this.update);
   }
 }
