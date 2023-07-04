@@ -1,0 +1,9 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "jsdom",
+  "collectCoverage": true,
+  "transform": {
+    "^.+\\.[tj]sx?$": "ts-jest"
+  },
+  "transformIgnorePatterns": ["node_modules/(?!sinon/)"]
+}
