@@ -2,10 +2,13 @@
   "name": "webaudio",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "lint:staged": "npx nx run-many -t lint:staged --projects=@webaudio/*",
+    "prepare": "husky install"
+  },
   "private": true,
-  "dependencies": {},
   "devDependencies": {
+    "husky": "^8.0.3",
     "nx": "16.4.2",
     "nx-cloud": "latest"
   },
