@@ -16,7 +16,10 @@ export default {
     {
       file: './dist/index.umd.js',
       name: '@webaudio/core',
-      format: 'umd'
+      format: 'umd',
+      globals: {
+        'standardized-audio-context': 'standardizedAudioContext'
+      }
     }
   ],
   external: ['standardized-audio-context'],
