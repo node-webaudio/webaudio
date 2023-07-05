@@ -9,6 +9,13 @@
         "preset": "conventional",
         "tagPrefix": "${projectName}@"
       }
+    },
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build"
+      },
+      "dependsOn": ["@webaudio/analyzer:build"]
     }
   }
 }
