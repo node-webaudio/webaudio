@@ -54,6 +54,10 @@ export class AudioAnalyzer extends EventEmitter {
       return;
     }
 
+    if (this.context.state !== 'running') {
+      await this.context.resume();
+    }
+
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         deviceId: deviceInfo.deviceId
