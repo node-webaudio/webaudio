@@ -24,7 +24,6 @@ export class AudioAnalyzer extends EventEmitter {
   constructor(context: IAudioContext = new AudioContext()) {
     super();
     this.context = context;
-    this.update = this.update.bind(this);
   }
 
   static async getSources(kind: AudioKind = 'audioinput') {
