@@ -13,6 +13,15 @@ export type AnalyzerOptions = {
   smoothingTimeConstant: number;
 };
 
+export type VolumeEvent = {
+  decibels: number;
+  raw: number;
+};
+
+export type SpectrumEvent = {
+  data: Uint8Array;
+};
+
 export class AudioAnalyzer extends EventEmitter {
   context: IAudioContext;
   analyzer: IAnalyserNode<AudioContext>;
