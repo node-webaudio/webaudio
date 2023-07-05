@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "allowJs": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
